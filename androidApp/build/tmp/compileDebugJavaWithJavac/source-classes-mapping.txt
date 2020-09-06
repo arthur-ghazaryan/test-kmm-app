@@ -1,0 +1,2 @@
+me/ag/poket/androidApp/BuildConfig.java
+ me.ag.poket.androidApp.BuildConfig

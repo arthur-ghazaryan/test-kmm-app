@@ -1,0 +1,19 @@
+CREATE TABLE Link (
+  url TEXT NOT NULL,
+  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  displayName TEXT NOT NULL
+);
+
+insertLink:
+INSERT INTO Link(url, displayName)
+VALUES(?, ?);
+
+removeAllLinks:
+DELETE FROM Link;
+
+selectLinkById:
+SELECT * FROM Link
+WHERE id = ?;
+
+selectAllLinks:
+SELECT * FROM Link;
