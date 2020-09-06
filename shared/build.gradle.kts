@@ -22,13 +22,17 @@ sqldelight {
     }
 }
 
+val iosExportSuffix = getIosTargetName().toLowerCase()
+
 kotlin {
     android()
     ios {
         binaries {
             framework {
                 baseName = "shared"
-                export("com.arkivanov.mvikotlin:mvikotlin-main:2.0.0-rc3")
+                export("com.arkivanov.mvikotlin:mvikotlin-$iosExportSuffix:2.0.0-rc3")
+                export("com.arkivanov.mvikotlin:mvikotlin-main-$iosExportSuffix:2.0.0-rc3")
+                export("com.arkivanov.mvikotlin:rx-$iosExportSuffix:2.0.0-rc3")
             }
         }
     }
@@ -92,11 +96,16 @@ android {
         }
     }
 }
+
+fun getIosTargetName(): String {
+    val sdkName = System.getenv("SDK_NAME") ?: "iphonesimulator"
+    return "ios" + if (sdkName.startsWith("iphoneos")) "Arm64" else "X64"
+}
+
 val packForXcode by tasks.creating(Sync::class) {
     group = "build"
     val mode = System.getenv("CONFIGURATION") ?: "DEBUG"
-    val sdkName = System.getenv("SDK_NAME") ?: "iphonesimulator"
-    val targetName = "ios" + if (sdkName.startsWith("iphoneos")) "Arm64" else "X64"
+    val targetName = getIosTargetName()
     val framework = kotlin.targets.getByName<KotlinNativeTarget>(targetName).binaries.getFramework(mode)
     inputs.property("mode", mode)
     dependsOn(framework.linkTask)
